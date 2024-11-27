@@ -4,7 +4,7 @@ import laravel from 'laravel-vite-plugin';
 export default defineConfig({
     server: {
         host: '0.0.0.0', // Listen on all network interfaces
-        port: 5173, // Default Vite port, or you can change this
+        port: 5193, // Default Vite port, or you can change this
         hmr: {
             host: 'localhost', // Use this for Hot Module Replacement (HMR)
         },

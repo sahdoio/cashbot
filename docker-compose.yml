@@ -9,7 +9,7 @@ services:
     container_name: cashbot-nginx
     image: nginx
     ports:
-      - '8080:80'
+      - '8090:80'
     depends_on:
       - cashbot
     volumes:
@@ -25,7 +25,7 @@ services:
       dockerfile: app.Dockerfile
     image: cashbot
     ports:
-      - '9000:9000'
+      - '9090:9000'
     volumes:
       - ./src:/var/www
     networks:
@@ -38,7 +38,7 @@ services:
       MYSQL_ROOT_PASSWORD: secret
       MYSQL_DATABASE: cashbot
     ports:
-      - '3306:3306'
+      - '3316:3306'
     volumes:
       - cashbot-mysql-volume:/var/lib/mysql
     networks:
@@ -48,7 +48,7 @@ services:
     container_name: cashbot-mongo
     image: mongo
     ports:
-      - 27017:27017
+      - 27027:27017
     volumes:
       - ./src:/var/www
       - cashbot-mongodb-volume:/data/db
@@ -64,7 +64,7 @@ services:
       dockerfile: node.Dockerfile
     image: cashbot/nodejs
     ports:
-      - '5173:5173'
+      - '5193:5193'
     volumes:
       - ./src:/var/www
     networks:
