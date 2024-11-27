@@ -1,0 +1,74 @@
+networks:
+  cashbot-network:
+    driver: bridge
+    ipam:
+      driver: default
+
+services:
+  cashbot-nginx:
+    container_name: cashbot-nginx
+    image: nginx
+    ports:
+      - '8080:80'
+    depends_on:
+      - cashbot
+    volumes:
+      - ./src:/var/www
+      - ./docker/nginx/app.conf:/etc/nginx/conf.d/default.conf
+    networks:
+      - cashbot-network
+
+  cashbot:
+    container_name: cashbot
+    build:
+      context: docker
+      dockerfile: app.Dockerfile
+    image: cashbot
+    ports:
+      - '9000:9000'
+    volumes:
+      - ./src:/var/www
+    networks:
+      - cashbot-network
+
+  cashbot-db:
+    container_name: cashbot-db
+    image: mysql:8
+    environment:
+      MYSQL_ROOT_PASSWORD: secret
+      MYSQL_DATABASE: cashbot
+    ports:
+      - '3306:3306'
+    volumes:
+      - cashbot-db-volume:/var/lib/mysql
+    networks:
+      - cashbot-network
+
+  cashbot-mongo:
+    container_name: cashbot-mongo
+    image: mongo
+    ports:
+      - 27017:27017
+    volumes:
+      - ./src:/var/www
+      - ./docker/mongodb:/data/db
+    logging:
+      driver: none
+    networks:
+      - cashbot-network
+
+  cashbot-node:
+    container_name: cashbot-node
+    build:
+      context: docker
+      dockerfile: node.Dockerfile
+    image: cashbot/nodejs
+    ports:
+      - '5173:5173'
+    volumes:
+      - ./src:/var/www
+    networks:
+      - cashbot-network
+
+volumes:
+  cashbot-db-volume:
